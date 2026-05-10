@@ -1,0 +1,829 @@
+<body>
+	<form id="formTarjeta" name="formTarjeta" method="post" action="/dispensaciones-view/tarjetaInter.jsf"
+		enctype="application/x-www-form-urlencoded">
+		<input type="hidden" name="formTarjeta" value="formTarjeta">
+
+
+		<div class="contenidocabecera">
+			<div class="cabecera">
+
+				<div class="infoAplicacion">
+					<div class="logo"></div><span class="nombreModulo">Dispensaciones</span>
+				</div>
+
+				<div class="infoVersion"><span class="versionModulo">Nomenclátor 02/2026</span><span
+						class="entornoInstalado"> Dispensaciones 3.28.0</span>
+				</div>
+
+				<div class="infoSesion">
+					<div class="zonaOperador"><span class="nombreOperador" title="JOSÉ ANTONIO MAS BERNAD - 20076">JOSÉ
+							ANTONIO MAS BERNAD - 20076</span>
+					</div>
+					<div>
+					</div>
+					<span class="fechaSistema">viernes, 06 de febrero de 2026</span>
+				</div>
+
+				<script>
+
+					function presenciaTarjetaFarmacia() {
+						if (sessionStorage.getItem("webstartActivado") == '1') {
+							var page = "https://localhost:46791/presenciaTarjetaFarmacia";
+							try {
+								console.log("invocando presencia tarjeta");
+
+								// Necesario para IE
+								jQuery.support.cors = true;
+								jQuery.ajax({
+									url: page,
+									type: 'get',
+									async: true,
+									timeout: 5000,
+									cache: false
+								}).done(function (data) {
+									var json = data;
+									var objeto = null;
+									if (typeof json == "string") {
+										objeto = JSON.parse(json);
+									}
+									console.log(page);
+									//Devuelva un json que tiene un OK indicando que 
+									//se encuentra la tarjeta, un KO si no esta la tarjeta
+									//Si OK. Lanza un timeout cada X segundos
+									//Si KO. Realiza el logout.
+
+									//Si falla la peticion. Es que el servidor local estacaido y hay que volver a hacer login. Logout.
+									jQuery("#panelWebstart").show();
+
+									console.log(objeto.resultado);
+									if (objeto.resultado == null) {
+										//pararProcesoWebstart();
+										location.href = "logout";
+									}
+									else {
+										if (objeto.resultado == "OK") {
+											setTimeout(function () {
+												console.log("presenciaTarjetaFarmacia");
+												presenciaTarjetaFarmacia();
+											}
+												, 10000);
+										}
+										else {
+											//pararProcesoWebstart();
+											location.href = "logout";
+										}
+									}
+								}).fail(function (jqXHR, textStatus, errorThrown) {
+									//Si falla la peticion es por timeout de webstart
+									console.log("Timeout invocando presencia tarjeta");
+									setTimeout(function () { presenciaTarjetaFarmacia(); }, 5000);
+								});
+							} catch (e) {
+								console.log(e.message);
+							}
+						} else if (sessionStorage.getItem("webstartActivado") == '0') {
+							console.log("Servicio webstart no iniciado. El control de presencia de tarjeta delegado en el applet");
+							jQuery("#panelWebstart").hide();
+						}
+					}
+
+					/*
+					* Metodo: pararServidorFarmacia
+					* Descripcion: Metodo para parar el servidor de farmacia
+					*
+					*/
+					/* function pararProcesoWebstart() {
+						jQuery.ajax({
+							url : 'https://localhost:46791/finalizarServidor',
+							type : 'get',
+							async: false,
+							cache: false,
+							success : function(data) {  
+								console.log("Parando proceso webstart")
+							},
+							error: function () {    
+							    
+								console.log("No se ha podido parar proceso webstart")
+												    
+							}
+					    
+							});
+					} */
+
+					presenciaTarjetaFarmacia();
+
+				</script>
+
+
+				<div id="divPestanas"><input type="hidden" name="formTarjeta:j_id26" value="8">
+					<ul class="ul-pestanyas">
+						<li class="margenpestanyas ">
+							<div class="floatLeft separacionpestanya_iz"></div>
+							<div class="floatLeft pestan">
+								<script type="text/javascript"
+									language="Javascript">function dpf(f) { var adp = f.adp; if (adp != null) { for (var i = 0; i < adp.length; i++) { f.removeChild(adp[i]); } } }; function apf(f, pvp) { var adp = new Array(); f.adp = adp; var i = 0; for (k in pvp) { var p = document.createElement("input"); p.type = "hidden"; p.name = k; p.value = pvp[k]; f.appendChild(p); adp[i++] = p; } }; function jsfcljs(f, pvp, t) { apf(f, pvp); var ft = f.target; if (t) { f.target = t; } f.submit(); f.target = ft; dpf(f); };</script>
+								<a id="formTarjeta:menuCommandLinkDispensaciones" href="#"
+									onclick="var a=function(){Richfaces.showModalPanel('cargandoDatos');};var b=function(){if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('formTarjeta'),{'formTarjeta:menuCommandLinkDispensaciones':'formTarjeta:menuCommandLinkDispensaciones'},'');}return false};return (a()==false) ? false : b();">Dispensaciones</a>
+							</div>
+							<div class="floatLeft separacionpestanya_der"></div>
+						</li>
+						<li class="">
+							<div class="floatLeft separacionpestanya_iz"></div>
+							<div class="floatLeft pestan"><a id="formTarjeta:menuCommandLinkDisManuales" href="#"
+									onclick="var a=function(){Richfaces.showModalPanel('cargandoDatos');};var b=function(){if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('formTarjeta'),{'formTarjeta:menuCommandLinkDisManuales':'formTarjeta:menuCommandLinkDisManuales'},'');}return false};return (a()==false) ? false : b();">Recetas
+									Manuales</a>
+							</div>
+							<div class="floatLeft separacionpestanya_der"></div>
+						</li>
+						<li class="">
+							<div class="floatLeft separacionpestanya_iz"></div>
+							<div class="floatLeft pestan"><a id="formTarjeta:menuCommandLinkIncidencias" href="#"
+									onclick="var a=function(){Richfaces.showModalPanel('cargandoDatos');};var b=function(){if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('formTarjeta'),{'formTarjeta:menuCommandLinkIncidencias':'formTarjeta:menuCommandLinkIncidencias'},'');}return false};return (a()==false) ? false : b();"
+									class="">Incidencias</a>
+							</div>
+							<div class="floatLeft separacionpestanya_der"></div>
+						</li>
+						<li class="">
+							<div class="floatLeft separacionpestanya_iz"></div>
+							<div class="floatLeft pestan"><a id="formTarjeta:menuCommandLinkDescargas" href="#"
+									onclick="var a=function(){Richfaces.showModalPanel('cargandoDatos');};var b=function(){if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('formTarjeta'),{'formTarjeta:menuCommandLinkDescargas':'formTarjeta:menuCommandLinkDescargas'},'');}return false};return (a()==false) ? false : b();"
+									class="">Descargas</a>
+							</div>
+							<div class="floatLeft separacionpestanya_der"></div>
+						</li>
+						<li class="activa">
+							<div class="floatLeft separacionpestanya_iz"></div>
+							<div class="floatLeft pestan"><a id="formTarjeta:menuOutputLinkDisInter"
+									name="formTarjeta:menuOutputLinkDisInter" href="#">Dispensaciones CC.AA.</a>
+							</div>
+							<div class="floatLeft separacionpestanya_der"></div>
+						</li>
+						<li class="">
+							<div class="floatLeft separacionpestanya_iz"></div>
+							<div class="floatLeft pestan"><a id="formTarjeta:menuCommandLinkDisEur" href="#"
+									onclick="var a=function(){Richfaces.showModalPanel('cargandoDatos');};var b=function(){if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('formTarjeta'),{'formTarjeta:menuCommandLinkDisEur':'formTarjeta:menuCommandLinkDisEur'},'');}return false};return (a()==false) ? false : b();">Dispensaciones
+									UE</a>
+							</div>
+							<div class="floatLeft separacionpestanya_der"></div>
+						</li>
+						<li class="">
+							<div class="floatLeft separacionpestanya_iz"></div>
+							<div class="floatLeft pestan"><a id="formTarjeta:menuCommandLinkConfiguracion" href="#"
+									onclick="var a=function(){Richfaces.showModalPanel('cargandoDatos');};var b=function(){if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('formTarjeta'),{'formTarjeta:menuCommandLinkConfiguracion':'formTarjeta:menuCommandLinkConfiguracion'},'');}return false};return (a()==false) ? false : b();">Configuración</a>
+							</div>
+							<div class="floatLeft separacionpestanya_der"></div>
+						</li>
+						<li class="">
+							<div class="floatLeft separacionpestanya_iz"></div>
+							<div class="floatLeft pestan"><a id="formTarjeta:menuCommandLinkAyuda" href="#"
+									onclick="var a=function(){Richfaces.showModalPanel('cargandoDatos');};var b=function(){if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('formTarjeta'),{'formTarjeta:menuCommandLinkAyuda':'formTarjeta:menuCommandLinkAyuda'},'');}return false};return (a()==false) ? false : b();">Ayuda</a>
+							</div>
+							<div class="floatLeft separacionpestanya_der"></div>
+						</li>
+					</ul>
+				</div>
+				<div id="formTarjeta:cargandoDatos" style="display: none;"><input autocomplete="off"
+						id="formTarjeta:cargandoDatosOpenedState" name="formTarjeta:cargandoDatosOpenedState"
+						type="hidden">
+					<div class="rich-modalpanel panelCargandoDatos" id="formTarjeta:cargandoDatosContainer"
+						style="position: absolute; display: none; z-index: 100; background-color: inherit;">
+						<div class="rich-mpnl-mask-div-opaque rich-mpnl-mask-div" id="formTarjeta:cargandoDatosDiv"
+							style="z-index: -1;"><button class="rich-mpnl-button"
+								id="formTarjeta:cargandoDatosFirstHref"></button></div>
+						<div class="rich-mpnl-panel">
+							<div class="rich-mp-container" id="formTarjeta:cargandoDatosCDiv"
+								style="position: absolute; left: 0px; top: 0px; z-index: 9;">
+								<div class="rich-mpnl-shadow" id="formTarjeta:cargandoDatosShadowDiv"></div>
+								<div class="rich-mpnl-ovf-hd rich-mpnl-trim rich-mpnl-content"
+									id="formTarjeta:cargandoDatosContentDiv">
+									<table border="0" cellpadding="0" cellspacing="0" class="rich-mp-content-table"
+										id="formTarjeta:cargandoDatosContentTable" style="height: 100%; width: 100%;">
+										<tbody>
+											<tr style="height: 99%">
+												<td class="rich-mpnl-body" valign="top">
+													<table>
+														<tbody>
+															<tr>
+																<td><img id="formTarjeta:iconoCargandoDatos"
+																		src="img/iconos/cargando.png" style="border:0">
+																</td>
+																<td>
+																	<table>
+																		<tbody>
+																			<tr>
+																				<td><span
+																						class="negrita tamano_3">Cargando
+																						datos...</span></td>
+																			</tr>
+																			<tr>
+																				<td><span class="tamano_3">Un momento
+																						por favor</span></td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoDatosResizerN"
+									style="width: 40px; height: 4px; cursor: n-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoDatosResizerE"
+									style="height: 40px; width: 4px; cursor: e-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoDatosResizerS"
+									style="width: 40px; height: 4px; cursor: s-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoDatosResizerW"
+									style="height: 40px; width: 4px; cursor: w-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoDatosResizerNWU"
+									style="width: 40px; height: 4px; cursor: nw-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoDatosResizerNEU"
+									style="height: 40px; width: 4px; cursor: ne-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoDatosResizerNEL"
+									style="width: 40px; height: 4px; cursor: ne-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoDatosResizerSEU"
+									style="height: 40px; width: 4px; cursor: se-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoDatosResizerSEL"
+									style="width: 40px; height: 4px; cursor: se-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoDatosResizerSWL"
+									style="height: 40px; width: 4px; cursor: sw-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoDatosResizerSWU"
+									style="width: 40px; height: 4px; cursor: sw-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoDatosResizerNWL"
+									style="height: 40px; width: 4px; cursor: nw-resize;"></div>
+							</div>
+						</div>
+						<div class="rich-mpnl-mask-div rich-mpnl-mask-div-transparent"
+							id="formTarjeta:cargandoDatosCursorDiv" style="z-index: -200;"><button
+								class="rich-mpnl-button" id="formTarjeta:cargandoDatosLastHref"></button></div>
+						<script type="text/javascript">new ModalPanel('formTarjeta:cargandoDatos',
+								{
+									width: 250,
+									height: 80,
+
+									minWidth: -1,
+									minHeight: -1,
+
+									resizeable: true,
+									moveable: true,
+
+									left: "auto",
+									top: "auto",
+
+									zindex: 100, onresize: '', onmove: '', onshow: '', onhide: '', onbeforeshow: '', onbeforehide: '',
+									domElementAttachment: "",
+									keepVisualState: false,
+									showWhenRendered: false,
+									selectBehavior: "disable",
+
+									autosized: false,
+									overlapEmbedObjects: false
+								});</script>
+					</div>
+					<script type="text/javascript"></script>
+				</div>
+				<div id="formTarjeta:cargandoWebStart" style="display: none;"><input autocomplete="off"
+						id="formTarjeta:cargandoWebStartOpenedState" name="formTarjeta:cargandoWebStartOpenedState"
+						type="hidden">
+					<div class="rich-modalpanel panelCargandoDatos" id="formTarjeta:cargandoWebStartContainer"
+						style="position: absolute; display: none; z-index: 100; background-color: inherit;">
+						<div class="rich-mpnl-mask-div-opaque rich-mpnl-mask-div" id="formTarjeta:cargandoWebStartDiv"
+							style="z-index: -1;"><button class="rich-mpnl-button"
+								id="formTarjeta:cargandoWebStartFirstHref"></button></div>
+						<div class="rich-mpnl-panel">
+							<div class="rich-mp-container" id="formTarjeta:cargandoWebStartCDiv"
+								style="position: absolute; left: 0px; top: 0px; z-index: 9;">
+								<div class="rich-mpnl-shadow" id="formTarjeta:cargandoWebStartShadowDiv"></div>
+								<div class="rich-mpnl-ovf-hd rich-mpnl-trim rich-mpnl-content"
+									id="formTarjeta:cargandoWebStartContentDiv">
+									<table border="0" cellpadding="0" cellspacing="0" class="rich-mp-content-table"
+										id="formTarjeta:cargandoWebStartContentTable"
+										style="height: 100%; width: 100%;">
+										<tbody>
+											<tr style="height: 99%">
+												<td class="rich-mpnl-body" valign="top">
+													<table>
+														<tbody>
+															<tr>
+																<td><img id="formTarjeta:iconoCargandoWebStart"
+																		src="img/iconos/cargandoWebStart.gif"
+																		style="border:0"></td>
+																<td>
+																	<table>
+																		<tbody>
+																			<tr>
+																				<td><span
+																						class="negrita tamano_3">Cargando...</span>
+																				</td>
+																			</tr>
+																			<tr>
+																				<td><span class="tamano_3">Un momento
+																						por favor</span></td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoWebStartResizerN"
+									style="width: 40px; height: 4px; cursor: n-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoWebStartResizerE"
+									style="height: 40px; width: 4px; cursor: e-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoWebStartResizerS"
+									style="width: 40px; height: 4px; cursor: s-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoWebStartResizerW"
+									style="height: 40px; width: 4px; cursor: w-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoWebStartResizerNWU"
+									style="width: 40px; height: 4px; cursor: nw-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoWebStartResizerNEU"
+									style="height: 40px; width: 4px; cursor: ne-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoWebStartResizerNEL"
+									style="width: 40px; height: 4px; cursor: ne-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoWebStartResizerSEU"
+									style="height: 40px; width: 4px; cursor: se-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoWebStartResizerSEL"
+									style="width: 40px; height: 4px; cursor: se-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoWebStartResizerSWL"
+									style="height: 40px; width: 4px; cursor: sw-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoWebStartResizerSWU"
+									style="width: 40px; height: 4px; cursor: sw-resize;"></div>
+								<div class="rich-mpnl-resizer" id="formTarjeta:cargandoWebStartResizerNWL"
+									style="height: 40px; width: 4px; cursor: nw-resize;"></div>
+							</div>
+						</div>
+						<div class="rich-mpnl-mask-div rich-mpnl-mask-div-transparent"
+							id="formTarjeta:cargandoWebStartCursorDiv" style="z-index: -200;"><button
+								class="rich-mpnl-button" id="formTarjeta:cargandoWebStartLastHref"></button></div>
+						<script type="text/javascript">new ModalPanel('formTarjeta:cargandoWebStart',
+								{
+									width: 250,
+									height: 80,
+
+									minWidth: -1,
+									minHeight: -1,
+
+									resizeable: true,
+									moveable: true,
+
+									left: "auto",
+									top: "auto",
+
+									zindex: 100, onresize: '', onmove: '', onshow: '', onhide: '', onbeforeshow: '', onbeforehide: '',
+									domElementAttachment: "",
+									keepVisualState: false,
+									showWhenRendered: false,
+									selectBehavior: "disable",
+
+									autosized: false,
+									overlapEmbedObjects: false
+								});</script>
+					</div>
+					<script type="text/javascript"></script>
+				</div>
+			</div>
+		</div>
+
+		<div class="contenedortarjetaInter"><span id="formTarjeta:mensajes">
+				<div id="informacion"><span id="formTarjeta:mensajesInfo"></span>
+				</div>
+			</span>
+			<div class="tarjetaInterRight tarjetaCenter"><input id="formTarjeta:idOcultoPanelAUTActivo" type="hidden"
+					name="formTarjeta:idOcultoPanelAUTActivo" value="true"><input id="formTarjeta:inputFlagPorSNS"
+					type="hidden" name="formTarjeta:inputFlagPorSNS" value="true"><input id="formTarjeta:idCodCaIsoSel"
+					type="hidden" name="formTarjeta:idCodCaIsoSel"><input id="formTarjeta:idDatosTarjNoLeidos"
+					type="hidden" name="formTarjeta:idDatosTarjNoLeidos" value="false"><input
+					id="formTarjeta:idDatosTarjNoVal" type="hidden" name="formTarjeta:idDatosTarjNoVal"
+					value="false"><span id="formTarjeta:wizardFormBusqBandMag" class="noMostrar">
+					<div class="tipoBusqMagnetica">
+						<hr class="bg-line">
+						<div class="wizard grid "><span id="formTarjeta:paso1WizardBandMagAct" class="grid-cell">
+								<div class="grid-cell">
+									<a href="#"><img src="/dispensaciones-view/jawr/img/cb679087397/img/iconos/1on.png">
+										<div>Tipo</div>
+									</a>
+								</div>
+							</span><span id="formTarjeta:paso2WizardBandMagAct" class="grid-cell">
+								<div class="grid-cell">
+									<a href="#"><img
+											src="/dispensaciones-view/jawr/img/cb2357766940/img/iconos/2on.png">
+										<div>Inserción datos</div>
+									</a>
+								</div>
+							</span><span id="formTarjeta:paso3WizardBandMagAct" class="noMostrar        grid-cell">
+								<div class="grid-cell">
+									<a href="#"><img
+											src="/dispensaciones-view/jawr/img/cb1822798459/img/iconos/3on.png">
+										<div>Leer tarjeta</div>
+									</a>
+								</div>
+							</span><span id="formTarjeta:paso3WizardBandMagNoAct" class="mostrar        grid-cell">
+								<div class="grid-cell">
+									<a href="#"><img
+											src="/dispensaciones-view/jawr/img/cb2798141290/img/iconos/3off.png">
+										<div>Leer tarjeta</div>
+									</a>
+								</div>
+							</span><span id="formTarjeta:paso4WizardBandMagAct" class="noMostrar        grid-cell">
+								<div class="grid-cell">
+									<a href="#"><img src="/dispensaciones-view/jawr/img/cb10846472/img/iconos/4on.png">
+										<div>Comunidad prescriptora</div>
+									</a>
+								</div>
+							</span><span id="formTarjeta:paso4WizardBandMagNoAct" class="mostrar        grid-cell">
+								<div class="grid-cell">
+									<a href="#"><img
+											src="/dispensaciones-view/jawr/img/cb2549562361/img/iconos/4off.png">
+										<div>Comunidad prescriptora</div>
+									</a>
+								</div>
+							</span>
+
+						</div>
+					</div>
+				</span><span id="formTarjeta:wizardFormBusqMan" class="mostrar">
+
+					<div class="tipoBusqManual">
+						<hr class="bg-line">
+						<div class="wizard grid tipoBusqManual"><span id="formTarjeta:paso1WizardMan" class="grid-cell">
+								<div class="grid-cell">
+									<a href="#"><img src="/dispensaciones-view/jawr/img/cb679087397/img/iconos/1on.png">
+										<div>Tipo</div>
+									</a>
+								</div>
+							</span><span id="formTarjeta:paso2WizardMan" class="grid-cell">
+								<div class="grid-cell">
+									<a href="#"><img
+											src="/dispensaciones-view/jawr/img/cb2357766940/img/iconos/2on.png">
+										<div>Inserción datos</div>
+									</a>
+								</div>
+							</span><span id="formTarjeta:paso3WizardManAct" class="noMostrar        grid-cell">
+								<div class="grid-cell">
+									<a href="#"><img
+											src="/dispensaciones-view/jawr/img/cb1822798459/img/iconos/3on.png">
+										<div>Comunidad prescriptora</div>
+									</a>
+								</div>
+							</span><span id="formTarjeta:paso3WizardManNoAct" class="mostrar        grid-cell">
+
+
+
+								<div class="grid-cell">
+									<a href="#"><img
+											src="/dispensaciones-view/jawr/img/cb2798141290/img/iconos/3off.png">
+										<div>Comunidad prescriptora</div>
+									</a>
+								</div>
+							</span>
+
+
+						</div>
+					</div>
+				</span>
+
+				<div class="clear tarjetaIdPaciente">
+					<ul class="listaInter">
+						<li>
+							<div class="introduccionDatos">
+								<div class="paddingTop2"><label class="stepNumberLabel">
+										1. </label><label class="stepTextLabel">
+										Elija el tipo de búsqueda que va a realizar</label>
+									<table id="formTarjeta:radioLeerBanda" class="labelRadio ">
+										<tbody>
+											<tr>
+												<td>
+													<input type="radio" name="formTarjeta:radioLeerBanda"
+														id="formTarjeta:radioLeerBanda:0" value="0"
+														onclick="cambiarRadioLeerBanda()" tabindex="1"><label
+														for="formTarjeta:radioLeerBanda:0" style="font-weight: normal;">
+														Banda magnética</label>
+												</td>
+												<td>
+													<input type="radio" checked="checked"
+														name="formTarjeta:radioLeerBanda"
+														id="formTarjeta:radioLeerBanda:1" value="1"
+														onclick="cambiarRadioLeerBanda()" tabindex="1"><label
+														for="formTarjeta:radioLeerBanda:1" style="font-weight: bold;">
+														Insertar datos de forma manual</label>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+
+								<div class="pseudoOculto"><input id="formTarjeta:idTxtOcultoMagnetico" type="text"
+										name="formTarjeta:idTxtOcultoMagnetico" onblur="pierdeFoco();"
+										onfocus="recuperaFoco()"><input id="formTarjeta:idTxtOcultoMagnetico2"
+										type="text" name="formTarjeta:idTxtOcultoMagnetico2"
+										onblur="A4J.AJAX.Submit('formTarjeta',event,{'similarityGroupingId':'formTarjeta:j_id119','parameters':{'formTarjeta:j_id119':'formTarjeta:j_id119'} } )"><input
+										id="formTarjeta:idCipAutSnsTarj" type="text" name="formTarjeta:idCipAutSnsTarj"
+										onblur="cambiadoCipAutCipSnsTarjeta();"><input id="formTarjeta:idTipoDatoLeido"
+										type="text" name="formTarjeta:idTipoDatoLeido" value="true">
+
+								</div>
+							</div>
+						</li><span id="formTarjeta:formBusqBandMag" class="noMostrar formBusqBandMag">
+
+							<li class="clear">
+								<div class="titleStepWizardWrapper"><label class="stepNumberLabel">
+										2. </label>
+									<label>Seleccione la comunidad</label>
+								</div>
+								<ul class="sublistaInter">
+									<li>
+										<div id="idPanelAUTBanMag" class="tarjetaCIP-AUT">
+											<ul class="listaInter">
+												<li class="clear">
+
+													<ul class="sublistaInter">
+														<li><label id="formTarjeta:lblComunidadBanMag" class="">
+																Comunidad</label>
+															<div class="clear"><select
+																	id="formTarjeta:comboComunidadBanMag"
+																	name="formTarjeta:comboComunidadBanMag"
+																	class="tamanyo230 width240 " size="1"
+																	onchange="activarPulsacionTextoOculto();cambiarFocoTxtOcultoMagnetico();compruebaCampo('comboComunidad');comunidadBandaCambiada();"
+																	tabindex="2">
+																	<option value="" selected="selected">Seleccione
+																	</option>
+																	<option value="04">Andalucía</option>
+																	<option value="10">Aragón</option>
+																	<option value="05">Asturias (Principado de)</option>
+																	<option value="14">Baleares (Illes)</option>
+																	<option value="12">Canarias</option>
+																	<option value="06">Cantabria</option>
+																	<option value="11">Castilla La Mancha</option>
+																	<option value="17">Castilla y León</option>
+																	<option value="01">Cataluña</option>
+																	<option value="13">Extremadura</option>
+																	<option value="03">Galicia</option>
+																	<option value="07">Rioja (La)</option>
+																	<option value="16">Madrid (Comunidad de)</option>
+																	<option value="08">Murcia (Región de)</option>
+																	<option value="15">Navarra (Comunidad Foral de)
+																	</option>
+																	<option value="02">País Vasco</option>
+																	<option value="09">Comunidad Valenciana</option>
+																	<option value="18">Ceuta</option>
+																	<option value="19">Melilla</option>
+																	<option value="20">Ingesa</option>
+																</select>
+															</div>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</div>
+									</li>
+								</ul>
+							</li>
+						</span><span id="formTarjeta:formLecturaTarj" class="noMostrar">
+
+							<li class="clear">
+								<div class="titleStepWizardWrapper"><label class="stepNumberLabel">
+										3. </label><label id="formTarjeta:leerTarj" class="">
+										Pase la tarjeta del paciente por el lector</label>
+								</div>
+								<ul class="sublistaInter">
+									<li>
+										<div id="lecturaDeTarjeta" onclick="activarPanelAut();comprobarMensaje();"
+											class="tarjetaCIP-AUT">
+											<ul class="listaInter">
+												<li class="clear">
+
+													<ul class="sublistaInter">
+														<li>
+															<div class="clear"><span id="formTarjeta:botonLeerTarj"
+																	class="noMostrar">
+
+																	<a class="bt_principal_tabla_inter marginLeft bt_redondo width78"
+																		onclick="cambiarFocoTxtOcultoMagnetico();">
+																		Pulsar y leer tarjeta
+																	</a></span>
+
+															</div>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</div>
+									</li>
+								</ul>
+							</li>
+						</span><span id="formTarjeta:formBusqMan" class="mostrar formBusqMan">
+
+							<li class="clear">
+								<div class="titleStepWizardWrapper"><label class="stepNumberLabel">
+										2. </label><label>
+										Introduzca los siguientes campos</label>
+								</div>
+								<ul class="sublistaInter">
+									<li>
+
+										<div id="idPanelAUT" onclick="activarPanelAut();comprobarMensaje();"
+											class="tarjetaCIP-AUT">
+											<ul class="listaInter">
+												<li class="clear">
+													<ul class="sublistaInter grid">
+
+
+														<li class="grid-cell"><label id="formTarjeta:lblComunidad"
+																class="">
+																Comunidad</label>
+															<div class="clear"><select id="formTarjeta:comboComunidad"
+																	name="formTarjeta:comboComunidad"
+																	class="comboHeight tamanyo230 width240" size="1"
+																	onchange="compruebaCampo('comboComunidad');comunidadManualCambiada();"
+																	tabindex="2">
+																	<option value="" selected="selected">Seleccione
+																	</option>
+																	<option value="803404">Andalucía</option>
+																	<option value="803410">Aragón</option>
+																	<option value="803405">Asturias (Principado de)
+																	</option>
+																	<option value="803414">Baleares (Illes)</option>
+																	<option value="803412">Canarias</option>
+																	<option value="803406">Cantabria</option>
+																	<option value="803411">Castilla La Mancha</option>
+																	<option value="803417">Castilla y León</option>
+																	<option value="803401">Cataluña</option>
+																	<option value="803413">Extremadura</option>
+																	<option value="803403">Galicia</option>
+																	<option value="803407">Rioja (La)</option>
+																	<option value="803416">Madrid (Comunidad de)
+																	</option>
+																	<option value="803408">Murcia (Región de)</option>
+																	<option value="803415">Navarra (Comunidad Foral de)
+																	</option>
+																	<option value="803402">País Vasco</option>
+																	<option value="803409">Comunidad Valenciana</option>
+																	<option value="803418">Ceuta</option>
+																	<option value="803419">Melilla</option>
+																</select>
+
+															</div>
+														</li>
+														<li class="grid-cell"><label id="formTarjeta:lblNumeroCIPAUT"
+																class="">
+																CIP-AUT</label>
+															<div class="clear"><input id="formTarjeta:idNumeroCIPAUT"
+																	type="text" name="formTarjeta:idNumeroCIPAUT"
+																	class="width225 upper" maxlength="20"
+																	onchange="compruebaCampo('idNumeroCIPAUT')"
+																	onfocus="activarPanelAut();"
+																	onkeyup="cambiadoCipAut();" tabindex="3">
+
+															</div>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</div>
+									</li>
+									<li class="marginLeft5">
+										<div id="idPanelSNS" onclick="activarPanelSns();comprobarMensaje();"
+											class="tarjetaCIP-AUT_disabled">
+											<ul class="listaInter">
+												<li class="clear">
+													<ul class="sublistaInter">
+														<li><label id="formTarjeta:lblNumeroCIPSNS" class="">
+																CIP-SNS</label>
+															<div class="clear"><input id="formTarjeta:idNumeroCIPSNS"
+																	type="text" name="formTarjeta:idNumeroCIPSNS"
+																	class="width225 upper fondoDisabled" maxlength="20"
+																	onchange="compruebaCampo('idNumeroCIPSNS')"
+																	onfocus="activarPanelSns();"
+																	onkeyup="cambiadoSNS();" tabindex="4">
+															</div>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</div>
+									</li>
+
+
+									<li>
+										<div class="cardModels grid"><a
+												href="/dispensaciones-view/file?id=16010301&amp;module=A" tabindex="6">
+												<span class="linkCardModels grid-cell"></span><span
+													class="grid-cell">Modelos tarjetas</span></a>
+										</div>
+
+									</li>
+
+
+								</ul>
+							</li>
+						</span>
+
+					</ul>
+				</div><span id="formTarjeta:formComunidadPres" class="noMostrar">
+
+
+					<div class="clear">
+
+						<ul class="listaInter">
+							<div class="titleStepWizardWrapper"><label class="stepNumberLabel">
+									3.</label><label class="">
+									Introduzca la comunidad prescriptora y pulse "Aceptar" o la tecla "Intro" para
+									comenzar la dispensación</label>
+							</div>
+							<li class="clear">
+								<ul class="sublistaInter grid">
+
+									<li class="grid-cell"><label id="formTarjeta:lblComunidadPrescriptora"
+											class=" floatLeft comboPrescriptora">
+											Comunidad prescriptora</label><img
+											src="/dispensaciones-view/jawr/img/cb2284453493/img/iconos/informacion.png"
+											class="floatLeft tooltip"
+											title="Puede ser distinta a la comunidad autónoma de origen del paciente"><span
+											class="floatLeft tooltip"
+											title="Puede ser distinta a la comunidad autónoma de origen del paciente"></span>
+										<div class="clear"><select id="formTarjeta:comboComunidadPrescriptora"
+												name="formTarjeta:comboComunidadPrescriptora"
+												class="comboPrescriptora comboHeight tamanyo230 width220 " size="1"
+												onchange="compruebaCampo('comboComunidadPrescriptora');comunidadPrescriptoraCambiada();"
+												tabindex="5">
+												<option value="" selected="selected">Seleccione</option>
+												<option value="803410">Aragón</option>
+												<option value="803405">Asturias (Principado de)</option>
+												<option value="803414">Baleares (Illes)</option>
+												<option value="803412">Canarias</option>
+												<option value="803406">Cantabria</option>
+												<option value="803411">Castilla La Mancha</option>
+												<option value="803417">Castilla y León</option>
+												<option value="803401">Cataluña</option>
+												<option value="803413">Extremadura</option>
+												<option value="803403">Galicia</option>
+												<option value="803407">Rioja (La)</option>
+												<option value="803416">Madrid (Comunidad de)</option>
+												<option value="803408">Murcia (Región de)</option>
+												<option value="803415">Navarra (Comunidad Foral de)</option>
+												<option value="803402">País Vasco</option>
+												<option value="803409">Comunidad Valenciana</option>
+												<option value="803418">Ceuta</option>
+												<option value="803419">Melilla</option>
+											</select>
+										</div>
+									</li>
+									<li class="grid-cell"><label id="formTarjeta:lblPINConfidencialidad"
+											class="floatLeft">
+											PIN de confidencialidad</label><img
+											src="/dispensaciones-view/jawr/img/cb2284453493/img/iconos/informacion.png"
+											class="floatLeft tooltip"
+											title="PIN que aportará el usuario para acceder a sus recetas confidenciales"><span
+											class="floatLeft tooltip"
+											title="PIN que aportará el usuario para acceder a sus recetas confidenciales"></span>
+										<div class="clear"><input id="formTarjeta:inputPINConfidencialidad" type="text"
+												name="formTarjeta:inputPINConfidencialidad"
+												class="width225 inpConfidencialidad" maxlength="4">
+										</div>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</span><span id="formTarjeta:formAceptar" class="noMostrar">
+
+					<div class="clear paddingTop ">
+						<ul class="listaInter">
+							<li class="right">
+								<div><input id="formTarjeta:accederPorCipPaciente" type="submit"
+										name="formTarjeta:accederPorCipPaciente" value="Aceptar"
+										onclick="Richfaces.showModalPanel('cargandoDatos');" tabindex="7"
+										class="bt_principal_tabla_inter marginLeft bt_redondo width78">
+								</div>
+							</li>
+						</ul>
+					</div>
+				</span>
+			</div>
+		</div><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState"
+			value="H4sIAAAAAAAAAO19CZQkR3VgdPf03Pc90oxU0ow0h0rVlVmZWVW6e3qulrp7WtM9ukYwyqrM7s6ZqsyarKzpHg2SJRmEDRgWS2AhwEjIYD0Qx4rFeMH7jC2uhQWbaxEsh56NbQ5JgBCItf3QRkRWZuURkVdVT7f2qd6bmo6szIwf/44fP3488Rzoretgj6ZPZsQT4gx3oj6REWu1ilIWDUVTM+O6LI8ZeqNsNHR5RJPk+972i4eemti+eDkAMzpYfUI8LWYqojqZOVw6IZcN0PrM1O4EYAEA210vL2vVmqbKqpHph5duUuTpI5pmgCXHT1t/mp9FYDd690xmQizLdcdjU0a1kjkEvw43jFrDGJdnDNB74rgisXbPO1TZyJwQp/XMtFzKGOJkRSllUOcDY2N7G6pUkcfFSfMhLslDvP3QZbSHroew18u6UjM8zwptPFto49mi/ez2ELwe0PQqWDYBv8dF/YRsiM3ntsWhyELUJ5OzO439KJ/8USH5o4XEj7It9tsT8uigCp88pEiSrDafFSI/O6BVq6IqDSnqSbCtKqsNx4V9Sr0mq3WxDAVXrsccCX7jVvTGVpv4wq6YqMFKAI6xmGiM5/nHOCyqDbGSbIBbfAP0vC3u6BQpF53wQQMbVMsKZIiyInZiYP63JRhYchHMJWPozV5iy/WyqE8mw8gmD6k970qAj2JifHDZRPjY5Gf+QdWQ9STo2OjjfOer4mODy8UZElYC9rg2+Me1v5FoVOt9o2q9KMGYkrHtVs9wBjR1Qpls6FhvJhnV+e5Rkd6XYHDJFPB6z+D6zzQkMcmg1rkH5XxP/MHwLaV7GXIvdaU8RX14WJPEyqioyhWwAusAVdL2iYbWUgW7QrrHDx/UFanZu6UZu8FlIU8e1MXalFIerIqTMlirlDVVGyCAAGKDINggxMZdPrEe4x0eaBy0r8Zox0oADvxmuTRmiLrl6cdHf9Eeeyz0b3Ch3wNFbAoIWRuKuGgUmMQUENjIjzbh1Ro1sLiK3LgTtpfTE+fh5dbDg+qEZtNsZ8gLhuV6HSK93gS75UvEfFBI+mB0LneM1XzU4q8F4GLaPGuwOokeRdMr/Ew+OUnz0UnqezT5BCsf3bvz4idvoXZNrKnORkU6XG5gJVAxNPzS/qPj/WVDOa3ZsMR54SoFNQ5UxMlRTR8bGUv0khWKNKBJA+JgXRuDmirJK9YpEtblaLo8og3JiuTQ63FetNr1opvEFjgxSLRhWrlT1CU0i9/bqJ/aC3XdMORS87Mw1ptqYl1jbsava76mv9zS2pFlo5BNNA7UO9uB3qPLiLf3XAd6jx6McPS+yd/7iJas/+iTFu/oufZHX6SoNqwEIqCA6wQKiok03Rq3GA2Llue9IM5bVjpEqPWKaMAvwhGpbCLhWekQnoT9JhKbNQ7Ghf3GpVez60Qys87ddXxmaXaeSGDMZ+14Z0+o2m9OhMQStDnNh1uh6AQPt3j88pCHoZWTy8ZhVT4iSooGVurovyFZ1pGUWTOybnAx+TVHB83nBw25avXdIleMh/LAXB2whhw6ncCGEvsv6xVpfMaAvgR0I6BagKSFjn2iN20gvYnFHHOhe0kE/pEZOzo6evjIuKaWKg3dnAARljXsbtD6xlijVtPgHKM56BZvxYV0FXRTlFp/wxhTsXuQ9CXjSg1PPLGXkoTTV00QHYskHB8jZO58eG2lhCIUDVWRRGQaWkAAkI7K/MOy2gDr4R0ljfyuOBLAtqSPsrjifKhuPZVIzWH8D8loPU50MMLCJPiPHhFyPry4ApWFiwdjgL+ipBmaOmS/wakEdsBHM/WGil9UkY06UtSZhpIZsF55RJ5owm5H3cNn306/pulgY1U3oOk6xKMWfVLsmEM1oUg0/2o+yyV5dqNHDwxrdUMXW7HTOOpgtUcdOBZQ41DCYv7wKJ6DEluclBjRjsjlRk2GpkhLFJ9vQiIkG0A+yQA2uAcAJ2tKe8BHX3p0QLFswuefLkmgCbhW9CLBw8nU+PKWGsdKQJTs18TT4ivdWtzWC9H1N5dIf8dYLXCOexUc90ijKuvawOBo/9HxRKK7UpHI70gKiCt8khAQ5ztiLAyY2LQj+glkh4+uSp1zFSQ7NtuM6nZ0dHECIXBExhM8nMwQb3Y6Qgh+nPeh6a3lmejTHkdIOp70neeWPgIYESURKoGuR01YWlY1hjgKyeZPGyESRwdH8BqbuWJecWiRWCh06IMYErQZRzGDQIhrD/rLcs0QW8ugYQRtru7tbRjQNQMbxHJZlmR9VNOhpzEqlhV4s2zBMgNnPuuODXnTvq78L1+75X2r67sr3fCWU+Bu2CskfAP91eP6q8f+a7H915JazZkAhi4vqetgTauTvZpWkUX1qyn9nm+/59+f7wZdt4He02KlIZudddXRf0tBDb1p6aHx4aHje/vHBgcMsLbPMJOY8Go3JFxtpm6lrTUMpZIZ0spiRb77d2vueE/2/z7bDRYMgsVTYn2qrEnyEFhU1hqqoZ+BL8Jj7kPg9I0ZuqJOXjkEXWHYbIiTMup+Nbz9tKgrooqHsNoE7WX4MQAwQLeMgVzrHhkCa1LW1/7TI3/x0r1vLMCRDVojc2XXQSVbkvX7n3jHtmUPPvNmJ5Y/UqvBV65rjahf18UzQ0rdmLn3G9ve9UXxvT3opQvqyp3yTA0xxDTyuLvgQ5eSGWPMEA35kFaBTDAmnpb1W7/8iasfeM9Xh7tB9xBYUq6I9fqIWLXGvLQO75HwM9A9NbGkaH1jso74+E6xVJGvNIFFcGbdkiGfRh0ekVXEcBDtsu2foQHIqqz/MP0Hd1S/8JEX7SHP2HzTi/5Yjr9qrT8xljc5xonaW/AN21rPLiLw5iICl7YYEeP2EOSMYbHWu+h7f/fUxju+3gN6BtGacnlKPl5SjKpYP3kALK1oonRAhDMLfRAsMaagRpyCyJypIVa49josRgunF2NDA7uHGsDnrA73H7nh+OA+AyzmeEYq5FiBdFf/6OjQ4P59EMI+329KtVbJ7JMnxEbFOGBe3NFfq1XOjGsnZfXQe/5h35XqOx9ZbiF1eitJUiD23sOefGTpzIwDWx75b8rCR75x07/9dNvZg4hMmMmMJhvbT1qEQHznA1euZKAivQk9sH+mBjFWd6Q6mKmmm01mhXd6bptees+xZz77+7d349vW2be17njsDW8ae+G2b1xl8xCE4QILBv8LByHuej79eOnCS/7nQxaGuOkMOG/72Wp98thOOI1ooipjKEZF3vmau/yJsLXazPQ14Co/UlPXMcW0kEth7Fx9Mf2dF9uJrQiAIvpahjncMHuzBBdZkZrN9T2Y6xeiZhZ97UJfe2ZqzY9NDhConJfg911K5Nge/FqbN5m8AXrqehlC1Veu1/smkdSKlQz8G3eNvtIzteZYONTc1xoL+roCAYb+uKpTMGXLqL3XAGswSE3M1ikw8ah5w2zDNCE1YVrXd6KOBLah9p041ZD1M5AtCFAJqHlk1qFim1BtakElybWKduZ6xNBEyAqoeetsQybnmpCtR5DV0Mq+RUgyWFhC7ogB1kbCtSAAu90AmnhoAeFMmUYXJ6kSixaVfBILJzPQ9zPO1GSC2Lo/NrTbIluxCKPKMxLLTZSw1tiDH7hs+nKwve/m/XsvHxw50CQBZJGqpvaVofNchnLusBPv+5XLTqC/Mkh9Y1XkNwPovxz+zk8XwI6WHjR7cO1CUKG7QdWyt4CbIsCYui6fLrJ+rUvvDenftQ6aXmHGaezcdi+nRVPBBliuwhmTLg9rUqOiUZmzTTIWczZz6kmpchs44MMThB1yaUWEzg1EUWr7WfM6nLsYulapQBsHHUZkREdaN1LodhaciUQ3hk3nClTCJQKITFre3nuQlLQrmn3NLm0LbPu01cAxByothEO/W9NVDSLSh+d6Daou9w+epyxEUwX17eBt0QieSzM8Q6B4p8Eks4Fg7yNJygarm10NqnVDrIjSrHECKwZzApxc9GJ30s0R3SSOkMDo9rMTol6FM37RIT6aGZfXM9ZvI1h93ZW6PEW837o0KLnYwJwnIDa4H7w+EhuwfJrh2BSGH7FBZ2G7eGYOkNCShZhIsGWh00ggCUDB3g1FFYAFLQH4AE0KVpp27nATvFmSAUlk2teGDNhGMBySaMjjmiSeodBwDNwYiYZ8Ic2wfIuGAR0RCcKy9h6zuBrJHKwBroJe5wkRzn8gDFKmDqdC+swMUpoq1IZwZlrHIc0DcnlK3KeIw3K9X9UGrB9t3CEfVTJjCvjFq8zgVvf+MdRah77WGmDrfvhJpyQptVOSd6aG4cf86wz8oHuegtPv89DUG4dUUPhNlUQ9c5umyijFeMfXv/k1sO3Uu7vB4kGwuDwll0/WG9VBsFSqG2PiaahF6oNgiS5OH56YqMvGIFhh/71PmZi4DaybViqVg8Pj5rWBKUg1+RhYpOFmHcJ7bPAYWF9HIRJ5XKnKqONRURereFBfOgaWGbqo1hXkDOLbr5/RwdpWEMh6hvnET38zve+JR7tB1xDoHsSz2mbUD7oC+xs6lMy+YVHSFWmptrIOhOfvwf/Qp6EjMIY/fcelp3/25Aec8bxedM/LL9z3DL4P3V/9gTlZ/ypsL0W8jdCOWLn5tm4kMN5ruIPrZ1ILPrn2vzYecHbwgZd/9L1ntn0WdL38zOjti4/A1/3b19+auwVkX/5Jz4VTT8P2T65719hm1J55+OxDqP3k9yv49+c3vPUW2P55t/7i07D98+Lrnt2M2s995h50/7Pbv3YAtZ+94zEJ/f7sQ7/9NW4/vfx76PfnVt8xhZ5/7vDpw+h9z73hjzeg9q8WXjeF7v8Vs2o/6u9XU1uuwu0P5l/A7X8Z/u5DsP3CtkcnEXwv3FiXUfvXN9z/5RrY9/Kv9a8c/CVq/83l//pL1H7hgbUfh+0XmZseQO0XTzw6VkPtD/7Bdbj9/Xc00Pt/c/5fPofavzmyYsvHAXj5t/f+ePjjgHv5t09+69KHEDJfeu1TWcCB7r5PfvYWhFT1S4Uaav/FD6u4/YPMW+D9oGfTF45sRkI4/lDXL1H7Lc+/jNtfXrce/b5gwS0Gun/BNb9+/HHUPvPGl3eh9l+9ZttPUPv5jz+B2r2793ej33vL370Vt/+8+jHc/m73QtReuO6dt6P2wpE9n8DtP/rbJbj9+Qd3TSFNCnbdjd636Iq/+TZuN268DLc/9i/34fbPzjyN2osvWdmH2ouPv/8NuP2w8H3c/tZXWNResur4H6P2ksFf/wi37//S7x9H7b97zdFdqP0fv/owai8V7u9G7aWnzrsFtz/80Y/h9r8O9KL2stR3bkftZcdOPonb7wRLcPsfHzyO2stXKHdPwfbyG8FvfoLa9/3pZbj9hd3vx+2XPv00aq+48shh1F5R+ec34PaTn/k8Gv+Kf1rOovbKnT/WUXvlzdyPcPu9Ky7E7a/9+TjCz6q1/P9C7VUDX+zC7Te+9gxu//UvPorbv//i82i8qzObj6H26vov343bj/Uvxu2fbjmE2ms2K59E7TWv7f8Nbr/tm3sQftZ888T7UXvtgv/4DmqvPfTAYdy+c8frcftv//NzaLxrfzHMoPY6/pJTqL1OavwQtz80cgFu/58fjSP8rL/w9FdQe/2Ni7tw+8H3zeD2F7IfRe0NS750CWpvuPLWY7h9L/Mwws+Gj9+3GLd/e9tB1N54yYc+idobT973Im6/d/0ehJ+Nz3z4UdTetPaq76D2pqPfGsHtN8qvx+2vXv05hJ9N//lWBrU37504hdqbT/3VD3H7U2+7ALd/mhpD+NiS/tRXUHvLawcBbj/6zAxuf/PUR1D7vE1LLkHt8w49fBtuv1V/GOHnvP/x1CLUPr/n3QdR+3z25/8Nt2eeehG3P3R0N8LP+c89+yhqb73wrv+N2lvLG0Zw+8EP/iFuf+/upxA+ti35hyxqbzv8lzXcvvulH+D25/5xG26/mHoTal9Q/N2XUfuCk28CCD8XfOyiadx+5smPoPaFO67f8Thas1mALHMz6EJzX7paTktSR4aR+BwrmAEvK/JyFWBt58KQoamCkPRN6OIknMUafTUZzizUM2J9FHrVZaUmVjoZiME7/mzvRFEleWYUdyji3RoixR+aBHJ8kFPXFdNC3jHZC+2c7CNZszbWMWszTKtthd3MXRYRZnH4YYvmy+ikb4XfeiMRvDd4rcdkAxF6e0s1FS3Hwd9lA+w5Yi+XTSmS3NpWt2unazfjzt1XBq0Stc1W4i0o4UJrGLALCNZKyVUdAMJviKVBRC4DdGVJDNhjrQnBe3W85CdL8I0lSGPo1LWEh8SYV4BLfXN92F/GDQQ19HACTCVhTZZJF3hq6InYP3leyYM928+qmpHysLeIWdpdZ+EuiBJzvRtBfgpoySG3sIyAj9o7bQAXmbLZzGjOVHz1ITqrFcwBNHnDUgwBnSOtsNupFQKLYxghxTOcOsQVuke3kleYDZB13miubA/LxpQmtZYWkQrTVGtt26GLdXChY0HS+xhakfzBkbsLy2994BfmaugWe5nTe++TfV9+849f4t5qufz89A6Q8unVmq5BKOvjYgmN6K7mciA2ExA3/oGYgO9Hf0OiztgoWIxRsBQ1f4e+fou+nkVfL6Gvn6Gv59HXL9HXCzM1B3N1LZ2+HGzZfrZRl3UHaKp4Wp4UdUL0yIYRQBhayyEuFVmf0qaDVCRhOSVcvSey58VWYOJ7RHvsUINh4YlLfQQM1xwqqCQSPDbNsHmX6oimNgywyyt/tFIyRnClGVeUo6uXZLG7tjotNrQ428lLZZ4Fsy4CmePGn7rcZM6Xkjpbc2TTckHrYBSbRvK4ipbHVXTRyxmV6vZ6WDPRZS6iS4W1jEWMvIxDls/GcppsFfULrKcMsKqZAWeVBsKaC7IYQ3RqbK2HFd7vgt0YDqtiP8qrza6oxJZAKQmx+WK6EExsR89ky8+CncHOg4WmjmgfE+CofovdNRl0ARD8hn43cSn4ngITycEP8Fq8vSPRujTYbbHuNYKKYXlUJtlFQT8tduskaINjugfooZWv+gCRfIC8nA/xAbApCzYTGbCdboLJwncSKEm4V8hC089EMv0uBr4k0O63+Jdefe2VZPHzZaIhiGLxz7X6F+AkSoiu/glWPsfaZe7mj5UvZDtg5ZcprRp5loVnSYRdYOs0rN1eMsDSunGmIg+gRGj7/gUkeuex6Pqx7uiaSvKE8+ZCNl2kZ8v4O6cZ/Qv8tstRVLCzbGrCHGA1nT0n8VJckHfASzEBjuSlhIM+CPjtZyFh6o5nDc0QK45HU9eksqlrUzvF00pd25m6IrVzJyW74m7wuuQjavE1GlMCmMLcGcfjfndm0C2Qc+XOLHG7M133vurTuMxffiLYp+l2KUi3g0PMPJofAsCmi0InBCCeC0fVTAln9+YwQj04t1YK9OBcIksvM0v14FqpQl2PzSs3ji8mdePmwqzn0oViLLNOcuZ4u7RvB525xPlbTTJwIerEAiVMjRTAjl2hMnvXbjJZFDCZiCx8muHtFaIo3ZMVBI7wRlA3nfFeTKCdSiJK12SWEuySz1SWWuBmKbcGaFq6XqxEZ2nCwJU6MWFYIlklpK3pQi7KdAG7EMHTBHNxjRCItTqkapMJICXhAAYFgYMnhs6+yTybBVsJq3LWYxSAy0BsA+Cg5UC7Yxq0lwTFEltgOwWsCk62AW20KGYI3AdBjiye9oPRXaO7wNk2hhPuGwWChNTHjqBIp/WwQa8D73EyXp0WzJ9pASeGTQtaHmCwHZ8XHM8jd6ttjicNL21lUkRVQgldk+YYwoO5DgVkgO0BodyWgNLOVvDI5/yfBHCFxJOAOTDaQrpA2hZFM9okd61oH2ZBddfO9QyAK3RqBiAAmgveYnKK/59wvY9hC2mGC5sAOHon64Q+lHYZql865JuYEId5/+6eiczEZe3jTajMNOe+Pz+B57pt+v7r3DkRuJrDqeYsoNB+WsC14LIImRi4V6pWqQE1ET8IfDofHFkgQxHAyUFL9vhxNydXwIk2II+aK2B2TIb6CivBip5g2ISbiPqkomgOIHKOozUCgpV2JwXgGw3q8UFz6UW3mSuA16XIDrSfQK9AL5qXs8G2MErCwGUEIgXJX1IHUxDSDMNHShdose7FgbkCTc6lHFZFdS/nYZYAXxaTepZzag3y6WI+kTUgOQg5+7CwDnqbbfoDBakD/sAaNxb2N2xvgDifiOcNXA12R8A87JNK/YSBYaYgpPNxqG/CQLapl4MQgwwf7siSVxPqqH4A6pYMsb35iW6CMcxElCdMuWoCH9kHMKE3wEXBHgC8zaAcs/cKtv444ky2/l7CvBJtf75VUCqx7d9tJe5EkriEi5FMIQ8tf7REQYthU4F2H/Mr8TDHV5TNF4gJZFFs/hzq/EK6GGePm6XzSfZesA/SnD/2PlfqgL1fUXaewWnZeq59W19Ey1IEnLv66/gWkCyfLmQDae7tn2wxOcS1VGPrOre0M7saTcAjmXp37zT4U36D6wG7o5saTfgDrL0XasKmKodFd91tBB9E+wq2+/8fL5vxZt5Ee0Yfr23HFcGk2wOzcNbPcuG238/JO+kugIeRgw5AfkU5BAxxI3wUh2CODEM+XeBiGgaSI1C0D52eN44AKxc74AisE9G51f7tqsgd4Nt3B3AhMgLWca9UapfAHcl2+ubS+eDdgVa/AUvZVAOMT/juSKSxCWgks2/2SoN3M2FHngkmEbHHwWvagDdoG2ATSsK8yGG/8V0G+Qj2V835fDTnrByylh3FnO/CSiCiSCVMJmBZLs1kC+FmvMWpF9LNd5NR1xGuvpLMNVuW26ogee4UN5/OB6dvthQ3wTzz1qY+vpOb+loYaq8QFsvzDhmC/LDFCb9LtNHE3NlujQYqVvdJIy31YJ42IuvWWLyVnpZbF/Hr1kP4Rt1YWm79hAZjXe250v59mf1Wt7qxHnb8DYlTQzANOEfRhAbfYcPw7/ia3cSLGMsDZeHCJBKQm0AY93OMtXPApA2xNM5BXZFqHju00MU6NvTdIaJNOjkobrV+z8CYIhrYBc6BKdCX1Qbc/LTWf9E54DXOAQ9WxUnZJzEG6MV5g+bIDbBJqU724bfW+yxmzdRQeqL7AyEtaTrkzCuyQVKWiKoMR6aqFa/j3fG6noPBdAzTzCTytaeZcxOJNbNZBKKpIbGwZWwySIi+TKf36rACm+YIKTW0zsk6Om/RJh9bR0PBVOVJXTHElCFCr1E7nutY7p6HLrI0a3RhO08XPs0REihpnZPpYlXH5unVsel0WRxKj05ZUefxJNiKbiVZ0Zvl0pgh6gbkGO8lt0YohlpLdNcVPkPpsoznxkaijq6ZHfOYK7NkRWrFO3h3vCNMkaJbBs+5LcyJZTSKi6i2sMUVG4jX3WMcIzF+z1HL/l1IsH/WizKTysQ5tIO5YolIPsFKZBWyscg3B3awQAwyxT5jx6PypuVSHdGDqnGTBm7yxSiW0NE9UecKjEUfZj7bwnziYO8c2MIC274tFKx5pBB/HhnFFi6IZ/dy/EShzAs418wqo1wAGfIZDVUUvz2BEtjQqHAk11NCGYK43hPywE/Anqw/W6P2TA3waaxEJLRy3wnMFnfoXe6hcxICejMJaDRMAyx3Nt2q7ht0VRdoRle3B3IunzRKdgc4aoaBIdMbZ1IY7yh6Jc8Ymao4o1Qb1TH5tAwl/0wK8nLgDRlocBRVrFx9tWeTxUPgnfHYJ3VdIc0wOV+susNAksXRmqQLrkn6eidjDsv1OhoHiTebcTindUPnB6ETXOEfGxU41P0ziqGlqlA9KOpezTC0apCNbpM3WGo2zdzwBuPmjXeBP4vLGwwDmcO/kNFhKMnMYc31Bc9c/9mErNCPNu2cK1ZgqCXX5oYV2PZZITf7rMBSWMEKLQj5zrDCfl3X9MisEJMBzMM2izzZc7cmXkLRdj6WRTVnCwjAxZxqY+DYPE4x2wtNb59jsoN3tR1nWBTsIwKft9zavM+tDUBfYie1CWuWDIvlyuXprpwbkQZY8PeP/P0jran7LAArJK60eCWqBydKVUVV6oaZrOBc2kKkGVeMRkWjuNU3gEHS0c08ky46jm6O1AFRBvPW1oh8jorv2d+I60E3L7RVyjoEG1BV0bB9PThExHYuXWQiYxu/n4xsyzHK8x1EdhI9xnJ0f/exYBTL4EYnio4ok1NGKgApVQ1d1E0zfW1qJy5K0HzDgIy37VCKJqCDWUnUKKaZXN5VFKHjAJHJZ9mrvMdefYNorx4zyQeNVKmilU86FP4aAhWTH9/joSybOBJ+FcD7xluodOZloPl4/9FxfPYNTXyGwQ0kggnI23Sk+UbrwrdJT5EOlxsVQxt13YdMP/EHt4T9c7CE4fssIQs4aadzVEqcoV8w9+gTUThRESdHNX1sZIxCoUPgAJFCbLpQCCWQ4+2IOOe7iKPWGsYB+wYDrPJcmd/kYIgltCLnR1IQVtakAXGwro3JFQo9BsFBIj1yrnrJEV6PCLLFLS0DrZ8NsMLVnt/EyBIrGUTevULBFg4h7oWTFnFEOyKXY6owzlWnLGIXvmwlRcKLRqg5og3JioSW+tcRrs5vAk0kLlaD3eFQ7MF5XDx3WOBdDlqkDhBxtlKJc5MIhWa199KskCWR/yZT8xDC/Lfj4AYqhiqyrGMEDYuTqmwoZTElnzILSjW9Juwsqdpws0Xx3AygE8lURFu8vNWsOgSJbzfqtHKnqEsH4JW9jfop9DL4LgNsIF53UTbYoXNO3Rd2ip4S51sKrYl1jbkZA9sEEjo2EH7idSr8nqiDAZZM6op0eVmuVALj6YkCECWcZrkX6jRnAILRVGrsoWAteRZ8tXs6PeURS0QUsxQU+67PDxSbp3l5UcwGodia4hd8U/xOo7hAnbiHaaU/A38Y6uekVDmlNioVHHlsBSnDnqKrjFTzY5OLrM2eAB8iabNiIc1mo2mzczcCnxZErJyjsLjvekIt2CnmZoQyiblzQcxtLScUfFt9O8zcDE+dWIcx95+Cu8NZA5o3zBqafq74+nHwQRJfw7l6fMaeTeh9lab8vDuiYa7eRPllrvnarDsD+Xq9m68nJuiMba0oFHxb1zrN2DnqfCuEse+El7vB87Ol9tDdzQ/tVqXW3zDGVOyhx+zF9Wi7soQwsblrI1Gc2Ny5shPzE2FEk8RRTJLv+lyLLiOTTBIXYJKK1hJW0beE1WnJzU4kNUm/Az+OpdQjciC6MwYDRrYaHRfWlV3LicKaE9qyfa9QNBEtLEe1sIRf5lpMzeqqXgvLBVnYorUaV/StxnVaTmVqDb7OR2uY2NGaBqgTZQEtMrcVrgkCBbHcNnq4ZlhUDbDGdy0hm5EyLBIRUsJZC+dRwjQY6JXuC1SIz2XUgCkJJCvmCMys80oHk80aYFHzr9mWDzFPRCvrRSs7z9Bq1nAMCMYQ0Jqz0Trb4RimQE9cDHfsX99V2352F0Xecah9EK3wDQyO9h8dj+dK+p52OK4BtlOZ1I4PDI7vj+0dWw/udhjeVKShjY2MtTE0+PTujngrD3c9RNTQBcLU4lWSnUuS+cyYIwIB1RT2mdb4rs2xt5QVCiS9lQvUW4Ktt2Y70paln4gXQW9Nd5UjCgHilKiutZ9Jmh8sB5FlLlF38EFXd7TenPIWIx7XErVOqKo/6XozUVUV8wlV1atUSk4lXwKCWxM153TrCFfnWkPlJkjzOWfElKCiiraKmu2YaTbHkWFgbPeOyVFx6PJR7fxAAyyriRKq1DSu1VgC+kj7bpPkb2QZkQI8ZwPPtYD3bCkbEktyhZ6M3cNkUv6tqAZYVTfk2kijWpJ18w1UerQ5uGwpaXLKdSDd2oDYlMRMVZO0jIIkUWqU8b4JnEZC3Qd5BIyS9B/LMmkmS6hpHt4PEmICrXibVu7wRe9HoyQTu4mzAhEHJS6HkKZVlKq9DCI4pWyLSJGjEBQi3QgOk4nEpQUuNI+I0A2ikWv6qouSog1ZN8Lpq/sCVbqOoNt8xxbhTaqojJs8g1EESa+p5YpSPmlRFb/LkWzkIu+mslgtKaJ+xAXDrt2e25ZVEPXxTSkDdDFRN5DHEE6ZnCAAZ+mKIVcx9wWT31Wf2pIdRJBMCY0pU7VI4hHQVrSLKqA8OnHCBoMko5R+KAJqO8yMw2EmbsbtfaYlnBDx2Qj7KmLgXKKm+vc+E4xs8zgiEhKwboJIUBtihYrpw2CYjGkhXeQiYNrTCQXNeRvN+XhoZmZdzWXLuMCFq7SiIo3PGGa+uqU+NOjlkC5TfBiSmEMVXlNkXZIPaGVtFy40iHSOXG7UZF00L3q0/qwPvkTMl+g2wEJNLVXMivotZd88SM8Al6F6aeIJcYY7UZ9ApeRqmiqrRmb/afh9E1LN+2dqulyv4wq966/wc0SRxMvXgD3BiaFD0DY0VzQoVoPGzxzrKlYbtRPfuiiJB1hU+4R03cMcHn+sy8Im7zQuMkJhZlg2pjSphUSM04EpOFZ5SIGOgCrrDrWgg52QBpl6Q8UvqcgGfE8lMy5Oet8DzE/XcgCQlerCReK6lk7nQF+AKS0bDV30Gm3gNA0X+4fgABmzhVXDMIQ67kEGWngSWBfPzASIIOlDmhfBGZmLw9EfmbGjo6OHj4ybgkEQytbm4mglhz2iKOYoDr89Y2IcMyaqDNYz/fBas36ss3yhs05S64t4EX4tXE65v1azK7TqYBMWwYahVDKoiKcsHRLrU2Oy8XTlO7e94wd7LuiGbKabzpN5V/P3T+97wzve+def4iCKZmrTkBnB6iZ6euEsBKFgyKQuwgT0vtCVAa3aUBVJlEZ1VFdjlSINOJdSaUnD+M5xpYZLQeHEfbM27fp7YG9OO9S6MOtat5h480RQbr5rZZmiHofA9WQBLKT5cPXo7sG/v8hLES+NYhnLC0yHWNLMV8Dv5ltgV7sSlultj275fOLCgm1tCKNsQGJ5Fh3a3NaOMLdk+GUlBsVIHxpFkoRz8gLxCJUoC/QaONbBTQzYVXRoGLJjfT94PZFoeKNlbrY2WHhh81F8wqcdPVdcFI8eVOx8BCzPUSJgLGsZRNbtYTmjKr6QFzu3Ia98jhjysg+693vZbha+EVwdKOH7dXilipkFsQeq9WGW2gg88h6dZE1i0nwBF/yOxKRReieX2McHtHpnlWXLzFOjd/vA3iCgqdE755uRXLjq+1ZKFdvBgOPAorHWf5HKbz0e6QgI5QXoxfM7ZalyxNhdZG6bBGO44NoZjc1lU9OKZEyxXDYVhwdkRP7mLYE8eDd4HZGcBS7NCLynhEDHYSJzJq6xF5IgGG/3tjWcqPuF/ec9QPYtaT4eXU+63OJST9ntYVlttHi2182zvd/EnAF5SFPLeBZm8TDdSZsxC//ro42KecIJrqxhzoOhk9aMaaLYhn96jH6Hsxa9IZfEARFOX3btdA9mJ77BHpiE7kIeIcH9M0AX2/lQaJ4hhkKRGPU+04yH4mlusDS5juextBGcpU8qOlXdhUfoCjx0JArBITpCJ2SGPx8s2n4WLXNSuJoBfWFA3GRxNn4NORDI2gsirGNBpEZSowsfOeWOBtK1Zsy6tiZps9SIa5gvHxSlwphGwYvgKNUoGCGjU4AmLHyTtK8XCrbt6DYbFt227VVHPfaJclKP/bPgidhecYSdFbO1xY8sud8B3yZROZfNpRm2zSnAHA6WOKdwxWu8EZyEcwrSxu02vXCZpcwp7CAb605LCJxT5OZ4TiERK6JE9vJGwVWh3pNSs/YpRJxSoBrDRKYvQtXGxptSBHRONmN7QcZvBBGxGxVRV7RMCc5z8XX8RZ1hjIMjQWOgzjCCekJS4yoRjCTbFJfF1p+zPLtIpMPLBd+xOiXN0NQhG/wVrjZV1v1J37ZOseEC7dl0kV5wI6Ty5+vAqWhRT5c29Xzibc/zVwUlsVxOSAuCq/LnOYaS7Frk7BhMzhGDqYXUs0/EgPQq9mFOxKPgT9pHV1yExfYSPgU+SaQ8l0Mr8NF2uc3BYAgro/vs2j0Dmq5DXYoqJ20gXk/oEZCijO3VsRSExKloRGNj5kNoJUNWUY0o6E81Rxzb2HAcnFoRzleN0hNFaO28x5xvW0toOpoBlplFe4fkCYOfpaqigpA45ywFlm8/K1nrFiRc13VwsbVMLlfMn26CxhpVJx4WazVZH6zWKsD84BXymg/w5Rjw1cDMh7K7c0FyD6hEWIzxi+a1KS+JBwZHL4e37nzNFcSf+o+OU7nq7eBtZK7KpvP5GGtGHQPz4hn4ocURcpz7kPkWHSmcbCfB5rh5ysl84nLEV4FdV7S1yDsChshIFqBGsaMLUfsg1Ph0Leo2LQKu8Un6ITZ9Zn8hV+ASFy+ejYXcHM+kufDaq56F3K0BC7ksrovnvuSlQy3GUq7TWaeTJwYBWHpkKMRT5+KUj3R62JR84hyfTxfYKB42qXIkQTXZIc6cK8QZvP8iiWcsMEm3jk7fDAaiDjO2P1sFJ8l4LqaLEZcUo4OAaHAJzQvFD+PkSlzDcwv1t4TeaEcPFTZJOpE4M4i4McL0EVXN4yZSvQaajAhZV63b6N1QZMQOTOd8+xTbMA8x8CzTdy+G6B82enVUp/ahrOLkBAE5PrG0j1UYlYBXO88658qzngXdU05c1eYo6I82yNia5yRQyDguosLAMTVPMACBs19chtasG7yBeH3+6JtS4iMCrwWXhc9JoUo47dt8ELoMlstDdcNHn/navVCkomBLRfxjWDsbTRXExEVmToKbO1jZxc4TGxZVsjDdB+4h0qbIRE8Nag8uRM1NpNw1XGtkmaOVUJ6WEKja3oqMUMyS15c4xuJBzn1+z3zOWRMKieewRO3gXR4hbk0K1w5FIZ0nnBMa2gtZO3B2JJujZxNG26MZoCzaIwSfp+ahRFroGwfXha21obyoZpJIjMU+isXlmCyONMRZ7AsD4FykEFpwR04hdB2f6cwWNMByZ5PKWPMrbZAXiEkxkfnsNCjhDK5DMj7fJ0m6nocNImcRvgW8iUxRIc25fb/Zh5DMqiGHkFi1I+KdetUcX4SsQvv9vm3Q7qQ7A6x0X3Dx7sIHwtIH0U3vsLj4FKAlDsZI/RvGCvxc5/6hA3IpsoCz0hY+EiwLs5L0xzH5uU/6cwIRJemPsyNinCsidu6T/ngu8YlOQafW2JiW6ygpL97OVI5Baevh0V9vJxRc25EVru2UvzZ9llx7yUkRNjxAvWvWAmo7O4lDhQUiZuRF6Zwsb1mw1S+tYQt5/eDaAIipnopz4c2TrgcdEzh5kHXNHACcT3iuzLK30qlVHJ4lBkt7WuBBWUAFOSDtWx2RCFMDt5vmn+VTDbQQDKehqqTtU+pobViK4hLYvBDZY6FsEONyTFpw58nNJmxkTg1KcfYW1Iqp7szhhWk7XyfxfSolFETKZtgmiE3OCQBSccHn8aoUyS1kK90XXDIWuBqHh7oesu56VKbC6za537pzN3KH1lqbMvBZiw0Du0wGWOPeUGs7Ula/0I/KzZYxYIjx9o4bA5Sw0PbuN46Lv/stsPeY1gCnUlBYdi+4LgjkQHNgvjfQHJinQnquvFLMQZaY/dnjAm8xcw4sQZMP2rYEPJ/mix22BHTY2rQE9KwHmiUwhxfLEpi5D0ktAR1EmiUwQYxuCazcDJolwPK10n0huiVA/HtNiBFAQu43AmNqvWkEVlpGAN5IsgBcBDlNJJ0TxAXDbkswHcuuRAvAATp/N/TKqDRBIe0BsI9IWgFOYnPhjkjz3WSmywUcxmw+mLro6pQ5w46QimLBFGE12PN28mSQt0PbvDu03dXrq153yhnA6doaqMlNThFqs7o0ycuJlyb7wPnE2o1yRYs9zRKgYeUDUh/s11JIYCcq8kkSFVt18Tu6DMlLSZch74T3f7T7YXpZ4ND9avQIZUdOVYqS0tjGmUqtUufxEMCY5YZTwc/OWvn38LBwJ4q/R7Tg7VV+T+1OpXbHzAxBXPv57qeIAl7k0gznXap6lbtf5e75yN2+kwwIhdH8xdJchid6esTizocBSokTCi4Ba7afRTXQ8cjQqO7KkPZ4wLsX7fQB5Nq2scL1Glcvw6CYIJklB6nEUfyK14LbSWqHz+ai7MMI69PcVCEAjtwHny44FrM92KM4LHayFO9OlkpSsvpcJarwYuJ8/n0gS04haS24ZFDxzLKu1AxN95YsbhH6KBgjE6GIShYHZqvQu6LQyN6sztM3q0ejEfpl7ayRpdheOsHrwFSMxfhRB+qIYbjUREUTDbTpJ4UXm50PkAMzD4C3E2nKCNBniLeXvVOABkRpqMkqJleF8C8l28oaa3hKjKcXxLo7aOkxzhEZYDPtJypzdybyGI2ne9w8XbCOvz7feeiFoqKh4gpI6OwLDBgyxTYhDTj7N5QaVU19IFhNHQJcKOqbSMtISt1QVINO6tvALWRS59OMkE0ZilGJQmpCf2R9JdjJj4I7+TH4zI9OZTVxeWomRyQ19CC4xyeGqcAsIjZWFpFXH0SOG38IPE6kI8umcwV/ztMcwk/WWgMBRafLpLfH20HdxEPkxApXT4iTL6VnSbkV2Hn0H1383rHsqeHg7CknAM5MKuf1wHwqvvP5VJxAzQeZu3wqns2lGSY7t/lUTiCi5FMJ9jZ+Iddir7nIp+L4xNvVrgdClFQnJ8cGJVfdDm4jo5ZLM9koVRcDeqRQwY7sChyRCucs04rjqJvZImW1efm9pqgQIeqEIslqWUE7lgIyqSl7zflcNp0L2MJD6cO31xx6hqODIwOeOw2wkfwD1WGMOmNdYntsnXUbuZx1RP05dRv3AyYa7jONegNtmaDS+WZwlExnBk4PeLrPGNIZRbbsLEYhzjmWncok4Fjq5sYwgeoHl1OVDESFl1/jnU/G5zhUEihMmZH68c3G8Io1UbQ2036iUCIoZWkBQcS22kkMsCNvH53dbsexiUvGfwC8PZ7H6C+7FCHOTPGgY+16/Qz470Rm4Yrpovcwz3k2IOIOv/6yXDNQPZFljpaL99rbMdveMS1clrp0GqYbeHCRXz8qmGT1RqmqGFTlexDsJ5KYhxN2NmArnOflvk3LYrksS7I+qqFSi6PQDMnwAQNsIF5vkcAAa51Fpfc2DENTgzMKer/VJI4DMQvPQ99dS6cPAJbKmk1Q8GUNlWsoKX7NaQqDTQyAcHYruDkIZyg7RlMDZILa8cUzLnW254hSnjIRUZ/Spoc1SazgnBs4KRP1SRFlaOFDIj3zLAMIJeN4DQJeVmpi5bghliricUyxVKs8UQreo8sSyvMy5+b5Apye5Ztqsvb/ALrkTfOTRQEA"
+			autocomplete="off">
+	</form>
+
+	<script type="text/javascript">
+		jQuery(document).ready(function () {
+			jQuery(document).keydown(function (e) {
+				if (e.ctrlKey && e.keyCode == 77 && e.shiftKey) {
+					e.preventDefault();
+					e.stopPropagation();
+				}
+			});
+		});
+	</script>
+
+
+</body>
